@@ -81,7 +81,14 @@
           <p id="bound-name"></p>
           <p id="bound-role"></p>
         </div>
-        <button class="btn btn-gray" onclick="doUnbind()">解除綁定</button>
+        <button class="btn btn-gray" id="btn-unbind" onclick="doUnbind()">解除綁定</button>
+        <div id="unbind-confirm" style="display:none;margin-top:10px;padding:12px;background:#fff5f5;border-radius:8px;font-size:13px;color:#c53030">
+          確定要解除綁定嗎？
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button onclick="doUnbindConfirm()" style="flex:1;padding:6px;background:#e53e3e;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">確定</button>
+            <button onclick="document.getElementById('unbind-confirm').style.display='none'" style="flex:1;padding:6px;background:#eee;border:none;border-radius:6px;cursor:pointer;font-size:13px">取消</button>
+          </div>
+        </div>
       </div>
 
       <!-- 綁定表單 -->
@@ -203,8 +210,12 @@ async function doBind() {
   }
 }
 
-async function doUnbind() {
-  if (!confirm('確定要解除綁定嗎？')) return;
+function doUnbind() {
+  document.getElementById('unbind-confirm').style.display = 'block';
+}
+
+async function doUnbindConfirm() {
+  document.getElementById('unbind-confirm').style.display = 'none';
   try {
     await callGAS('unbindSelf', { uid: userId });
     setMsg('success', '已解除綁定');
